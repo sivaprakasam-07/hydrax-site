@@ -2,6 +2,8 @@
 import { motion } from "framer-motion";
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import { ArrowRight } from 'lucide-react';
+import AnimatedShopButton from "../components/AnimatedShopButton";
 import bottleImg from "../assets/bottle-main.png"; // replace with your image path
 
 export default function FeaturesPage() {
@@ -100,12 +102,10 @@ export default function FeaturesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            <button className="group relative px-8 py-4 bg-gradient-to-r from-[#00c2ff] to-[#0099cc] rounded-full text-lg font-semibold shadow-lg transition-all duration-300 hover:shadow-[#00c2ff]/30 hover:shadow-2xl hover:scale-105">
-              <span className="relative z-10">Shop Now</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0099cc] to-[#007aa3] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
+            {/* Animated Shop Button Component */}
+            <AnimatedShopButton />
             
-            <Link to="/" className="group px-8 py-4 border-2 border-white/20 rounded-full text-lg font-semibold transition-all duration-300 hover:border-[#00c2ff] hover:text-[#00c2ff] hover:shadow-lg hover:scale-105">
+            <Link to="/" className="group px-6 py-2.5 border-2 border-white/20 rounded-full text-sm font-medium transition-all duration-300 hover:border-[#00c2ff] hover:text-[#00c2ff] hover:shadow-lg hover:scale-105">
               ← Back to Home
             </Link>
           </motion.div>
