@@ -15,21 +15,21 @@ export default function FeaturesPage() {
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       
-      // Calculate relative position from bottle center
-      const x = ((e.clientY - centerY) / rect.height) * -15; // Reduced for tilted bottle
-      const y = ((e.clientX - centerX) / rect.width) * 15 + 15; // Base rotation + movement
-      const z = 35 + ((e.clientX - centerX) / rect.width) * 10; // Maintain tilt with slight variation
+      // Calculate relative position from bottle center but keep the diagonal tilt
+      const x = ((e.clientY - centerY) / rect.height) * -10; // Subtle up/down movement
+      const y = ((e.clientX - centerX) / rect.width) * 10 + 15; // Maintain right turn base
+      const z = 35; // Keep constant diagonal tilt - no variation
       
       setRotate({ 
-        x: Math.max(-20, Math.min(20, x)), 
-        y: Math.max(-10, Math.min(40, y)),
-        z: Math.max(25, Math.min(45, z))
+        x: Math.max(-15, Math.min(15, x)), 
+        y: Math.max(5, Math.min(25, y)), // Always maintain right turn
+        z: 35 // Fixed diagonal position
       });
     }
   };
 
   const handleMouseLeave = () => {
-    setRotate({ x: 0, y: 15, z: 35 }); // Return to diagonal position
+    setRotate({ x: 0, y: 15, z: 35 }); // Always return to diagonal position
     setIsHovering(false);
   };
 
