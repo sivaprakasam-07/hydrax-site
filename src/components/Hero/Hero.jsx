@@ -32,7 +32,7 @@ export default function Hero() {
           <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
         </div>
         
-        <div className="mt-12">
+        <div className="mt-9">
           <ButtonCreativeRight />
         </div>
       </div>
