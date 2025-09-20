@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import { FaUser, FaShoppingCart } from "react-icons/fa";
+import { LogOut, User, Settings, Gauge } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Menu, MenuItem, HoveredLink } from "../AnimatedMenu";
 import MobileAppPopup from "../MobileAppPopup";
 import LoginForm from "../LoginForm";
+import { useAuth } from "../../contexts/AuthContext";
+import authService from "../../services/authService";
 
 export default function Navbar() {
   const [active, setActive] = useState(null);
@@ -10,6 +14,10 @@ export default function Navbar() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileAppOpen, setIsMobileAppOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  
+  const { currentUser, signOut } = useAuth();
+  const navigate = useNavigate();
 
   // Handle escape key
   useEffect(() => {
@@ -20,6 +28,7 @@ export default function Navbar() {
         setIsCartOpen(false);
         setIsMobileAppOpen(false);
         setIsLoginOpen(false);
+        setIsUserMenuOpen(false);
         document.body.style.overflow = 'unset';
       }
     };
@@ -27,6 +36,18 @@ export default function Navbar() {
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, []);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (isUserMenuOpen && !e.target.closest('.user-menu-container')) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isUserMenuOpen]);
 
   const openShopMenu = () => {
     setIsShopMenuOpen(true);
@@ -49,7 +70,26 @@ export default function Navbar() {
   };
 
   const handleUserClick = () => {
-    setIsLoginOpen(true);
+    if (currentUser) {
+      setIsUserMenuOpen(!isUserMenuOpen);
+    } else {
+      setIsLoginOpen(true);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      setIsUserMenuOpen(false);
+      navigate('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  const goToDashboard = () => {
+    navigate('/dashboard');
+    setIsUserMenuOpen(false);
   };
 
   return (
@@ -107,10 +147,79 @@ export default function Navbar() {
           {/* Icons */}
           <div className="flex items-center gap-5">
             <div className="flex gap-10 items-center">
-              <FaUser 
-                onClick={handleUserClick}
-                className="text-xl text-[#fff4f4] cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110 hover:text-[#00C2FF]" 
-              />
+              {/* User Profile / Login */}
+              <div className="relative user-menu-container">
+                {currentUser ? (
+                  <>
+                    {/* Authenticated User */}
+                    <div 
+                      onClick={handleUserClick}
+                      className="flex items-center space-x-2 cursor-pointer group"
+                    >
+                      {currentUser.photoURL ? (
+                        <img 
+                          src={currentUser.photoURL} 
+                          alt="Profile" 
+                          className="w-8 h-8 rounded-full object-cover border-2 border-transparent group-hover:border-[#00C2FF] transition-colors"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 bg-gradient-to-br from-[#00C2FF] to-[#0099CC] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <FaUser className="text-sm text-white" />
+                        </div>
+                      )}
+                      <span className="text-white text-sm hidden md:block group-hover:text-[#00C2FF] transition-colors">
+                        {currentUser.displayName?.split(' ')[0] || 'Profile'}
+                      </span>
+                    </div>
+
+                    {/* User Dropdown Menu */}
+                    {isUserMenuOpen && (
+                      <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-zinc-900 rounded-lg shadow-lg border border-gray-200 dark:border-zinc-700 py-2 z-[3000]">
+                        <div className="px-4 py-2 border-b border-gray-200 dark:border-zinc-700">
+                          <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                            {currentUser.displayName || 'User'}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                            {currentUser.email}
+                          </p>
+                        </div>
+                        
+                        <button
+                          onClick={goToDashboard}
+                          className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center space-x-2"
+                        >
+                          <Gauge className="w-4 h-4" />
+                          <span>Dashboard</span>
+                        </button>
+                        
+                        <button
+                          className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center space-x-2"
+                        >
+                          <Settings className="w-4 h-4" />
+                          <span>Settings</span>
+                        </button>
+                        
+                        <div className="border-t border-gray-200 dark:border-zinc-700 mt-2 pt-2">
+                          <button
+                            onClick={handleLogout}
+                            className="w-full px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center space-x-2"
+                          >
+                            <LogOut className="w-4 h-4" />
+                            <span>Sign out</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  /* Unauthenticated User */
+                  <FaUser 
+                    onClick={handleUserClick}
+                    className="text-xl text-[#fff4f4] cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110 hover:text-[#00C2FF]" 
+                  />
+                )}
+              </div>
+              
               <div className="relative -mr-[90px]">
                 <FaShoppingCart 
                   onClick={openCart}
