@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { FaUser, FaShoppingCart } from "react-icons/fa";
 import { Menu, MenuItem, HoveredLink } from "../AnimatedMenu";
 import MobileAppPopup from "../MobileAppPopup";
+import LoginForm from "../LoginForm";
 
 export default function Navbar() {
   const [active, setActive] = useState(null);
   const [isShopMenuOpen, setIsShopMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileAppOpen, setIsMobileAppOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   // Handle escape key
   useEffect(() => {
@@ -17,6 +19,7 @@ export default function Navbar() {
         setIsShopMenuOpen(false);
         setIsCartOpen(false);
         setIsMobileAppOpen(false);
+        setIsLoginOpen(false);
         document.body.style.overflow = 'unset';
       }
     };
@@ -46,7 +49,7 @@ export default function Navbar() {
   };
 
   const handleUserClick = () => {
-    window.location.href = '/login'; // Adjust path as needed
+    setIsLoginOpen(true);
   };
 
   return (
@@ -190,6 +193,12 @@ export default function Navbar() {
       <MobileAppPopup 
         isOpen={isMobileAppOpen} 
         onClose={() => setIsMobileAppOpen(false)} 
+      />
+
+      {/* Login Form */}
+      <LoginForm 
+        isOpen={isLoginOpen} 
+        onClose={() => setIsLoginOpen(false)} 
       />
     </>
   );

@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* Hide default cursor globally */
+* {
+  cursor: none !important;
+}
+
+/* Ensure our custom pointer is always on top */
+.custom-pointer {
+  z-index: 9999 !important;
+  pointer-events: none !important;
+}
+
 /* Hide scrollbar for all browsers */
 html {
   scrollbar-width: none; /* Firefox */

@@ -5,6 +5,7 @@ import Header from "./components/Header/Header";
 import Hero from "./components/Hero/Hero";
 import FeaturesPage from "./pages/FeaturesPage";
 import ScrollProgress from "./components/ScrollProgress";
+import { HydraXPointer } from "./components/HydraXPointer";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -26,6 +27,7 @@ function App() {
         <Header />
         <ScrollProgress className="top-[61px]" />
         <AnimatedRoutes />
+        <HydraXPointer />
       </div>
     </Router>
   );
