@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Thermometer, Bluetooth, Leaf, Zap } from 'lucide-react';
 import AnimatedShopButton from "../components/AnimatedShopButton";
 import ButtonHoverLeft from "../components/ButtonHoverLeft";
+import { Features } from "../components/Features";
 import bottleImg from "../assets/bottle-main.png"; // replace with your image path
 
 export default function FeaturesPage() {
@@ -77,7 +78,7 @@ export default function FeaturesPage() {
       content:
         "More than just a bottle — HydraX is your personal hydration assistant that transforms how you stay hydrated.",
       tagline: "Smart. Stylish. Sustainable.",
-      icon: <Zap className="size-8 text-[#00c2ff]" />,
+      icon: <Zap className="size-8" />,
       image: bottleImg,
     },
     {
@@ -85,7 +86,7 @@ export default function FeaturesPage() {
       title: "Temperature Control",
       content:
         "Enjoy perfectly cooled or gently warmed water with Hydrax's intelligent temperature control. Whether it's hot outside or chilly indoors, your bottle adjusts to match your environment and preferences.",
-      icon: <Thermometer className="size-8 text-[#00c2ff]" />,
+      icon: <Thermometer className="size-8" />,
       image: bottleImg,
     },
     {
@@ -94,7 +95,7 @@ export default function FeaturesPage() {
       subtitle: "Bluetooth Connectivity",
       content:
         "Hydrax connects effortlessly to your smartphone via Bluetooth. Monitor hydration, set reminders, adjust temperature, and explore smart features—all through the app in real-time.",
-      icon: <Bluetooth className="size-8 text-[#00c2ff]" />,
+      icon: <Bluetooth className="size-8" />,
       image: bottleImg,
     },
     {
@@ -102,7 +103,7 @@ export default function FeaturesPage() {
       title: "Environmental Adaptation",
       content:
         "Hydrax adapts intelligently to your surroundings. Stay refreshed with perfect hydration no matter the weather.",
-      icon: <Leaf className="size-8 text-[#00c2ff]" />,
+      icon: <Leaf className="size-8" />,
       image: bottleImg,
     },
   ];
@@ -185,135 +186,13 @@ export default function FeaturesPage() {
         </motion.div>
       </div>
 
-      {/* Features Section with Segmented Progress Bar */}
-      <motion.div
-        ref={featuresRef}
-        className="relative px-6 md:px-12 lg:px-20 py-20"
-      >
-        {/* Header */}
-        <div className="text-center mb-20">
-          <motion.p className="text-sm md:text-base text-gray-400 uppercase tracking-wider mb-4">
-            GET STARTED EFFORTLESSLY
-          </motion.p>
-          <motion.h2 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight">
-            Four simple steps to experience
-            <br />
-            <span className="text-[#00c2ff]">
-              the future of hydration
-            </span>
-          </motion.h2>
-        </div>
-
-        <div className="relative max-w-6xl mx-auto">
-          {/* Progress Bar */}
-          <div className="absolute left-8 md:left-16 top-0 bottom-0 w-0.5">
-            {featuresData.map((_, i) => {
-              const segmentHeight = 22; // %
-              const gapHeight = 2; // %
-              const top = i * (segmentHeight + gapHeight);
-
-              return (
-                <div
-                  key={i}
-                  className="absolute w-full"
-                  style={{ top: `${top}%`, height: `${segmentHeight}%` }}
-                >
-                  <div className="w-full h-full bg-gray-800 rounded-sm" />
-                  <div
-                    className="absolute top-0 w-full bg-gradient-to-b from-[#00c2ff] to-[#0099cc] rounded-sm transition-all duration-200 ease-out"
-                    style={{ height: `${segmentProgress[i] * 100}%` }}
-                  />
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Features List */}
-          <div className="space-y-24 md:space-y-32">
-            {featuresData.map((feature, i) => (
-              <motion.div
-                key={feature.id}
-                ref={(el) => (featureRefs.current[i] = el)}
-                className="relative flex items-start gap-8 md:gap-16"
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, delay: i * 0.2 }}
-              >
-                {/* Dot */}
-                <div className="relative flex-shrink-0">
-                  <motion.div
-                    className={`w-6 h-6 md:w-8 md:h-8 border-4 rounded-full flex items-center justify-center transition-all duration-200 ${
-                      segmentProgress[i] >= 1
-                        ? "bg-[#00c2ff] border-[#00c2ff] shadow-lg shadow-[#00c2ff]/50"
-                        : segmentProgress[i] > 0
-                        ? "bg-[#00c2ff]/50 border-[#00c2ff] shadow-md shadow-[#00c2ff]/30"
-                        : "bg-gray-800 border-gray-600"
-                    }`}
-                  >
-                    <motion.div
-                      className={`w-2 h-2 md:w-3 md:h-3 rounded-full ${
-                        segmentProgress[i] >= 1
-                          ? "bg-white"
-                          : segmentProgress[i] > 0
-                          ? "bg-white/70"
-                          : "bg-gray-600"
-                      }`}
-                    />
-                  </motion.div>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 flex flex-col lg:flex-row gap-8 lg:gap-16">
-                  {/* Text */}
-                  <div className="flex-1 space-y-4 md:space-y-6">
-                    <div className="flex items-start gap-4">
-                      {feature.icon}
-                      <div>
-                        <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2">
-                          {i + 1}. {feature.title}
-                        </h3>
-                        {feature.subtitle && (
-                          <p className="text-base md:text-lg text-[#00c2ff] font-medium">
-                            {feature.subtitle}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-base md:text-lg text-gray-300 leading-relaxed max-w-xl">
-                      {feature.content}
-                    </p>
-                    {feature.tagline && (
-                      <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#00c2ff]/10 border border-[#00c2ff]/30 rounded-full">
-                        <span className="text-[#00c2ff] font-semibold text-sm md:text-base">
-                          {feature.tagline}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Image */}
-                  <div className="flex-1 flex justify-center lg:justify-end">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#00c2ff]/20 to-purple-500/20 blur-3xl scale-150 animate-pulse"></div>
-                      <motion.img
-                        src={feature.image}
-                        alt={feature.title}
-                        className="relative w-32 md:w-48 lg:w-64 drop-shadow-2xl"
-                        style={{
-                          transform: `perspective(1000px) rotateY(15deg) rotateZ(35deg)`,
-                        }}
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.div>
+      {/* New Features Section */}
+      <Features 
+        data={featuresData}
+        collapseDelay={4000}
+        ltr={false}
+        linePosition="left"
+      />
     </motion.div>
   );
 }
