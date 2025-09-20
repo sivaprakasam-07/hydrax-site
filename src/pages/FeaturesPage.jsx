@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Thermometer, Bluetooth, Leaf, Zap } from 'lucide-react';
 import AnimatedShopButton from "../components/AnimatedShopButton";
+import ButtonHoverLeft from "../components/ButtonHoverLeft";
 import bottleImg from "../assets/bottle-main.png"; // replace with your image path
 
 export default function FeaturesPage() {
@@ -152,11 +153,8 @@ export default function FeaturesPage() {
           >
             <AnimatedShopButton />
 
-            <Link
-              to="/"
-              className="group px-6 py-2.5 border-2 border-white/20 rounded-full text-sm font-medium transition-all duration-300 hover:border-[#00c2ff] hover:text-[#00c2ff] hover:shadow-lg hover:scale-105"
-            >
-              ← Back to Home
+            <Link to="/" className="inline-block ml-12">
+              <ButtonHoverLeft />
             </Link>
           </motion.div>
         </motion.div>
