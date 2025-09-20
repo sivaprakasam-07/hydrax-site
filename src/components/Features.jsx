@@ -267,12 +267,11 @@ export function Features({
           >
             {data[currentIndex]?.image ? (
               <motion.div className="relative h-full flex items-center justify-center">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#00c2ff]/20 to-purple-500/20 blur-3xl scale-150 animate-pulse"></div>
                 <motion.img
                   key={currentIndex}
                   src={data[currentIndex].image}
                   alt="feature"
-                  className="relative w-[300px] h-[300px] object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-transform duration-300 ease-in-out rotate-[23deg] hover:rotate-[15deg] hover:scale-105"
+                  className="relative w-[300px] h-[300px] object-contain drop-shadow-lg transition-transform duration-300 ease-in-out hover:scale-105"
                   initial={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98 }}

@@ -1,31 +1,17 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FaUser, FaShoppingCart } from "react-icons/fa";
+import { Menu, MenuItem, HoveredLink } from "../AnimatedMenu";
 
 export default function Navbar() {
-  const [isExploreOpen, setIsExploreOpen] = useState(false);
+  const [active, setActive] = useState(null);
   const [isShopMenuOpen, setIsShopMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const dropdownRef = useRef(null);
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsExploreOpen(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape') {
-        setIsExploreOpen(false);
+        setActive(null);
         setIsShopMenuOpen(false);
         setIsCartOpen(false);
         document.body.style.overflow = 'unset';
@@ -62,95 +48,67 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 w-full bg-white backdrop-blur-[10px] z-[1000] border-b border-black/10 px-2.5">
-        <div className="max-w-[1200px] mx-auto flex justify-between items-center py-[15px]">
+      <nav className="fixed top-0 w-full bg-black backdrop-blur-[10px] z-[1000] border-b border-white/10 px-2.5">
+        <div className="max-w-[1200px] mx-auto flex justify-between items-center py-[12px]">
           {/* Logo */}
-          <div className="flex items-center justify-center h-[30px]">
+          <div className="flex items-center justify-center h-[30px] mb-2">
             <a href="#" className="flex items-center justify-center h-[30px] no-underline">
               <img
-                src="src/assets/hydrax.png"
+                src="src\assets\HYDRAX-1.png"
                 alt="HydraX Logo"
-                className="h-[180px] w-auto object-contain transition-transform duration-300 ease-in-out align-middle absolute mt-[15px] ml-0 mr-[130px] hover:scale-105"
+                className="h-[200px] w-auto object-contain transition-transform duration-300 ease-in-out align-middle absolute mt-[15px] ml-0 mr-[130px] hover:scale-105"
               />
             </a>
           </div>
 
-          {/* Nav links */}
-          <ul className="flex list-none gap-[30px]">
-            <li>
-              <button 
-                onClick={openShopMenu}
-                className="no-underline text-[#333] font-bold transition-colors duration-300 ease-in-out flex items-center gap-[5px] hover:text-[#007bff] bg-transparent border-none cursor-pointer"
-              >
-                Shop
-              </button>
-            </li>
-            <li className="relative" ref={dropdownRef}>
-              <button 
-                onClick={() => setIsExploreOpen(!isExploreOpen)}
-                className="no-underline text-[#333] font-bold transition-colors duration-300 ease-in-out flex items-center gap-[5px] hover:text-[#007bff] bg-transparent border-none cursor-pointer"
-              >
-                Explore 
-                <span className={`text-xs text-black transition-transform duration-300 ease-in-out ${isExploreOpen ? 'rotate-180' : ''}`}>
-                  ▼
-                </span>
-              </button>
-              
-              {/* Dropdown Menu */}
-              <div className={`absolute top-[200%] left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-[0_8px_25px_rgba(0,0,0,0.15)] py-[15px] min-w-[170px] border border-black/8 mt-[5px] z-[1001] transition-all duration-300 cubic-bezier(0.4,0,0.2,1) ${
-                isExploreOpen 
-                  ? 'opacity-100 visible translate-y-0' 
-                  : 'opacity-0 invisible -translate-y-2.5'
-              }`}>
-                <a 
-                  href="#" 
-                  className="block text-[#555] text-[0.95rem] py-3 px-5 transition-all duration-200 ease-in-out border-l-[3px] border-transparent font-semibold hover:bg-blue-500/5 hover:text-[#007bff] hover:border-l-[#007bff] hover:pl-[25px]"
-                >
-                  Mobile App
-                </a>
-                <a 
-                  href="#" 
-                  className="block text-[#555] text-[0.95rem] py-3 px-5 transition-all duration-200 ease-in-out border-l-[3px] border-transparent font-semibold hover:bg-blue-500/5 hover:text-[#007bff] hover:border-l-[#007bff] hover:pl-[25px]"
-                >
-                  How it works
-                </a>
-                <a 
-                  href="#" 
-                  className="block text-[#555] text-[0.95rem] py-3 px-5 transition-all duration-200 ease-in-out border-l-[3px] border-transparent font-semibold hover:bg-blue-500/5 hover:text-[#007bff] hover:border-l-[#007bff] hover:pl-[25px]"
-                >
-                  Sustainability
-                </a>
-                <a 
-                  href="#" 
-                  className="block text-[#555] text-[0.95rem] py-3 px-5 transition-all duration-200 ease-in-out border-l-[3px] border-transparent font-semibold hover:bg-blue-500/5 hover:text-[#007bff] hover:border-l-[#007bff] hover:pl-[25px]"
-                >
-                  Blog
-                </a>
+          {/* Animated Nav Menu */}
+          <Menu setActive={setActive}>
+            <MenuItem setActive={setActive} active={active} item="Shop" onClick={openShopMenu}>
+              <div className="flex flex-col space-y-4 text-sm">
+                <HoveredLink href="#">Smart Bottles</HoveredLink>
+                <HoveredLink href="#">Accessories</HoveredLink>
+                <HoveredLink href="#">Bundles</HoveredLink>
+                <HoveredLink href="#">Gift Cards</HoveredLink>
               </div>
-            </li>
-            <li>
-              <a href="#" className="no-underline text-[#333] font-bold transition-colors duration-300 ease-in-out flex items-center gap-[5px] hover:text-[#007bff]">
-                Custom
-              </a>
-            </li>
-            <li>
-              <a href="#" className="no-underline text-[#333] font-bold transition-colors duration-300 ease-in-out flex items-center gap-[5px] hover:text-[#007bff]">
-                Sale
-              </a>
-            </li>
-          </ul>
+            </MenuItem>
+            
+            <MenuItem setActive={setActive} active={active} item="Explore">
+              <div className="flex flex-col space-y-4 text-sm">
+                <HoveredLink href="#">Mobile App</HoveredLink>
+                <HoveredLink href="#">How it works</HoveredLink>
+                <HoveredLink href="#">Sustainability</HoveredLink>
+                <HoveredLink href="#">Blog</HoveredLink>
+              </div>
+            </MenuItem>
+            
+            <MenuItem setActive={setActive} active={active} item="Custom">
+              <div className="flex flex-col space-y-4 text-sm">
+                <HoveredLink href="#">Design Your Bottle</HoveredLink>
+                <HoveredLink href="#">Corporate Orders</HoveredLink>
+                <HoveredLink href="#">Engraving</HoveredLink>
+              </div>
+            </MenuItem>
+            
+            <MenuItem setActive={setActive} active={active} item="Sale">
+              <div className="flex flex-col space-y-4 text-sm">
+                <HoveredLink href="#">Limited Offers</HoveredLink>
+                <HoveredLink href="#">Clearance</HoveredLink>
+                <HoveredLink href="#">Bundle Deals</HoveredLink>
+              </div>
+            </MenuItem>
+          </Menu>
 
           {/* Icons */}
           <div className="flex items-center gap-5">
             <div className="flex gap-10 items-center">
               <FaUser 
                 onClick={handleUserClick}
-                className="text-xl text-[#1a1a1a] cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110 hover:text-[#00C2FF]" 
+                className="text-xl text-[#fff4f4] cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110 hover:text-[#00C2FF]" 
               />
               <div className="relative -mr-[90px]">
                 <FaShoppingCart 
                   onClick={openCart}
-                  className="text-xl text-[#1a1a1a] cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110 hover:text-[#00C2FF]" 
+                  className="text-xl text-[#fffafa] cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110 hover:text-[#00C2FF]" 
                 />
               </div>
             </div>
