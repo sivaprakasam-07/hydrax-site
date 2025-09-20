@@ -1,10 +1,13 @@
 import { ArrowRight } from 'lucide-react';
 import React from 'react';
 
-function AnimatedShopButton() {
+function AnimatedShopButton({ onClick }) {
   return (
     <>
-      <div className='group relative cursor-pointer p-2 w-36 border bg-white rounded-full overflow-hidden text-black text-center font-semibold'>
+      <div 
+        onClick={onClick}
+        className='group relative cursor-pointer p-2 w-36 border bg-white rounded-full overflow-hidden text-black text-center font-semibold'
+      >
         <span className='translate-x-3 group-hover:translate-x-12 group-hover:opacity-0 transition-all duration-300 inline-block'>
           Shop Now
         </span>

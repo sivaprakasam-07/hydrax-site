@@ -18,12 +18,26 @@ export const MenuItem = ({
   children,
   onClick
 }) => {
+  const handleClick = (e) => {
+    e.preventDefault();
+    if (active === item) {
+      setActive(null); // Close if already open
+    } else {
+      setActive(item); // Open this menu
+    }
+    if (onClick) {
+      onClick(e);
+    }
+  };
+
   return (
-    <div onMouseEnter={() => setActive(item)} className="relative">
+    <div className="relative">
       <motion.button
-        onClick={onClick}
+        onClick={handleClick}
         transition={{ duration: 0.3 }}
-        className="cursor-pointer text-white hover:text-[#00c2ff] font-bold transition-colors duration-300 bg-transparent border-none">
+        className={`cursor-pointer font-bold transition-colors duration-300 bg-transparent border-none ${
+          active === item ? 'text-[#00c2ff]' : 'text-white hover:text-[#00c2ff]'
+        }`}>
         {item}
       </motion.button>
       {active !== null && (
@@ -33,7 +47,7 @@ export const MenuItem = ({
           transition={transition}>
           {active === item && (
             <div
-              className="absolute top-[calc(100%_+_1.2rem)] left-1/2 transform -translate-x-1/2 pt-4">
+              className="absolute top-[calc(100%_+_1.2rem)] left-1/2 transform -translate-x-1/2 pt-4 z-50">
               <motion.div
                 transition={transition}
                 layoutId="active"
@@ -56,9 +70,22 @@ export const Menu = ({
   setActive,
   children
 }) => {
+  // Handle clicks outside the menu to close dropdowns
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.relative')) {
+        setActive(null);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [setActive]);
+
   return (
     <nav
-      onMouseLeave={() => setActive(null)}
       className="relative rounded-full border border-transparent bg-black/70 backdrop-blur-sm shadow-lg flex justify-center space-x-8 px-6 py-2">
       {children}
     </nav>
@@ -67,12 +94,20 @@ export const Menu = ({
 
 export const HoveredLink = ({
   children,
+  onClick,
   ...rest
 }) => {
+  const handleClick = (e) => {
+    if (onClick) {
+      onClick(e);
+    }
+  };
+
   return (
     <a
       {...rest}
-      className="text-gray-300 hover:text-[#00c2ff] transition-colors duration-200 block py-3 px-5 font-semibold border-l-[3px] border-transparent hover:border-l-[#00c2ff] hover:bg-[#00c2ff]/10 hover:pl-[25px] rounded-r-md">
+      onClick={handleClick}
+      className="text-gray-300 hover:text-[#00c2ff] transition-colors duration-200 block py-3 px-5 font-semibold border-l-[3px] border-transparent hover:border-l-[#00c2ff] hover:bg-[#00c2ff]/10 hover:pl-[25px] rounded-r-md cursor-pointer">
       {children}
     </a>
   );

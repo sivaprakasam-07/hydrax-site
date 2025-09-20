@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { FaUser, FaShoppingCart } from "react-icons/fa";
 import { Menu, MenuItem, HoveredLink } from "../AnimatedMenu";
+import MobileAppPopup from "../MobileAppPopup";
 
 export default function Navbar() {
   const [active, setActive] = useState(null);
   const [isShopMenuOpen, setIsShopMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isMobileAppOpen, setIsMobileAppOpen] = useState(false);
 
   // Handle escape key
   useEffect(() => {
@@ -14,6 +16,7 @@ export default function Navbar() {
         setActive(null);
         setIsShopMenuOpen(false);
         setIsCartOpen(false);
+        setIsMobileAppOpen(false);
         document.body.style.overflow = 'unset';
       }
     };
@@ -63,9 +66,9 @@ export default function Navbar() {
 
           {/* Animated Nav Menu */}
           <Menu setActive={setActive}>
-            <MenuItem setActive={setActive} active={active} item="Shop" onClick={openShopMenu}>
+            <MenuItem setActive={setActive} active={active} item="Shop">
               <div className="flex flex-col space-y-4 text-sm">
-                <HoveredLink href="#">Smart Bottles</HoveredLink>
+                <HoveredLink href="#" onClick={openShopMenu}>Smart Bottles</HoveredLink>
                 <HoveredLink href="#">Accessories</HoveredLink>
                 <HoveredLink href="#">Bundles</HoveredLink>
                 <HoveredLink href="#">Gift Cards</HoveredLink>
@@ -74,7 +77,7 @@ export default function Navbar() {
             
             <MenuItem setActive={setActive} active={active} item="Explore">
               <div className="flex flex-col space-y-4 text-sm">
-                <HoveredLink href="#">Mobile App</HoveredLink>
+                <HoveredLink href="#" onClick={() => setIsMobileAppOpen(true)}>Mobile App</HoveredLink>
                 <HoveredLink href="#">How it works</HoveredLink>
                 <HoveredLink href="#">Sustainability</HoveredLink>
                 <HoveredLink href="#">Blog</HoveredLink>
@@ -182,6 +185,12 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+
+      {/* Mobile App Popup */}
+      <MobileAppPopup 
+        isOpen={isMobileAppOpen} 
+        onClose={() => setIsMobileAppOpen(false)} 
+      />
     </>
   );
 }

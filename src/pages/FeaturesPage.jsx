@@ -5,12 +5,14 @@ import { ArrowRight, Thermometer, Bluetooth, Leaf, Zap } from 'lucide-react';
 import AnimatedShopButton from "../components/AnimatedShopButton";
 import ButtonHoverLeft from "../components/ButtonHoverLeft";
 import { Features } from "../components/Features";
+import HydraXPricing from "../components/HydraXPricing";
 import bottleImg from "../assets/bottle-main.png"; // replace with your image path
 
 export default function FeaturesPage() {
   const [rotate, setRotate] = useState({ x: 0, y: 15, z: 35 });
   const [isHovering, setIsHovering] = useState(false);
   const [segmentProgress, setSegmentProgress] = useState([0, 0, 0, 0]); // progress for each feature
+  const [isPricingOpen, setIsPricingOpen] = useState(false);
   const bottleRef = useRef(null);
   const featuresRef = useRef(null);
   const featureRefs = useRef([]);
@@ -152,7 +154,7 @@ export default function FeaturesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            <AnimatedShopButton />
+            <AnimatedShopButton onClick={() => setIsPricingOpen(true)} />
 
             <Link to="/" className="inline-block ml-12">
               <ButtonHoverLeft />
@@ -192,6 +194,12 @@ export default function FeaturesPage() {
         collapseDelay={4000}
         ltr={false}
         linePosition="left"
+      />
+
+      {/* HydraX Pricing Modal */}
+      <HydraXPricing 
+        isOpen={isPricingOpen} 
+        onClose={() => setIsPricingOpen(false)} 
       />
     </motion.div>
   );
