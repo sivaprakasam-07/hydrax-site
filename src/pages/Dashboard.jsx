@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
 import { useAuth } from '../contexts/AuthContext';
 import { User, Settings, Droplets, TrendingUp, Calendar } from 'lucide-react';
 
 const Dashboard = () => {
   const { currentUser } = useAuth();
+
+  // Show welcome toast when dashboard loads
+  useEffect(() => {
+    if (currentUser) {
+      const firstName = currentUser.displayName?.split(' ')[0] || 'there';
+      toast.success(`💧 Welcome to your dashboard, ${firstName}!`, {
+        duration: 4000,
+        style: {
+          background: 'rgba(0, 194, 255, 0.1)',
+          border: '1px solid rgba(0, 194, 255, 0.5)',
+          color: '#00C2FF',
+          fontWeight: '600',
+        },
+      });
+    }
+  }, [currentUser]);
 
   const stats = [
     {
@@ -112,6 +129,16 @@ const Dashboard = () => {
             {['250ml', '500ml', '750ml', '1L'].map((amount) => (
               <button
                 key={amount}
+                onClick={() => {
+                  toast.success(`💧 Logged ${amount} of water!`, {
+                    duration: 3000,
+                    style: {
+                      background: 'rgba(0, 194, 255, 0.1)',
+                      border: '1px solid rgba(0, 194, 255, 0.5)',
+                      color: '#00C2FF',
+                    },
+                  });
+                }}
                 className="bg-[#00C2FF]/20 hover:bg-[#00C2FF]/30 border border-[#00C2FF]/30 rounded-lg p-4 text-center transition-colors"
               >
                 <Droplets className="w-6 h-6 text-[#00C2FF] mx-auto mb-2" />

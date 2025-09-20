@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { X, Eye, EyeOff, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "../lib/utils";
@@ -40,15 +41,24 @@ export function LoginForm({ isOpen, onClose }) {
 
     try {
       if (isLogin) {
-        await authService.signIn(formData.email, formData.password);
+        const result = await authService.signIn(formData.email, formData.password);
+        const firstName = result.user.displayName?.split(' ')[0] || 'there';
+        toast.success(`🎉 Welcome back, ${firstName}!`, {
+          duration: 5000,
+        });
       } else {
         const displayName = `${formData.firstName} ${formData.lastName}`.trim();
-        await authService.signUp(formData.email, formData.password, displayName);
+        const result = await authService.signUp(formData.email, formData.password, displayName);
+        const firstName = formData.firstName || 'there';
+        toast.success(`🚀 Welcome to HydraX, ${firstName}!`, {
+          duration: 5000,
+        });
       }
       
       onClose(); // Close modal on success
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -59,10 +69,15 @@ export function LoginForm({ isOpen, onClose }) {
     setError("");
 
     try {
-      await authService.signInWithGoogle();
+      const result = await authService.signInWithGoogle();
+      const firstName = result.user.displayName?.split(' ')[0] || 'there';
+      toast.success(`🎉 Welcome back, ${firstName}!`, {
+        duration: 5000,
+      });
       onClose(); // Close modal on success
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }

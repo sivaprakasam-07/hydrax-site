@@ -3,6 +3,7 @@ import {
   onAuthStateChanged,
   signOut as firebaseSignOut
 } from 'firebase/auth';
+import toast from 'react-hot-toast';
 import { auth } from '../config/firebase';
 
 // Create the authentication context
@@ -28,8 +29,10 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       await firebaseSignOut(auth);
+      toast.success('👋 Signed out successfully!');
     } catch (error) {
       setError(error.message);
+      toast.error('Failed to sign out');
       throw error;
     }
   };
@@ -41,9 +44,28 @@ export const AuthProvider = ({ children }) => {
 
   // Listen for authentication state changes
   useEffect(() => {
+    let isInitialLoad = true;
+    
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      const previousUser = currentUser;
       setCurrentUser(user);
       setLoading(false);
+
+      // Show welcome toast only for new logins (not on initial load)
+      if (!isInitialLoad && user && !previousUser) {
+        const firstName = user.displayName?.split(' ')[0] || 'there';
+        toast.success(`🎉 Welcome back, ${firstName}!`, {
+          duration: 5000,
+          style: {
+            background: 'rgba(0, 194, 255, 0.1)',
+            border: '1px solid rgba(0, 194, 255, 0.5)',
+            color: '#00C2FF',
+            fontWeight: '600',
+          },
+        });
+      }
+      
+      isInitialLoad = false;
     });
 
     // Cleanup subscription on unmount
